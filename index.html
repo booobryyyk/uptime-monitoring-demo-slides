@@ -1,0 +1,886 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Uptime Monitoring — Self-Hosted, Code-First, Cost-Effective</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --dk1: #202023;
+        --lt1: #ffffff;
+        --dk2: #686970;
+        --lt2: #f5f6fa;
+        --accent1: #e25544;
+        --accent2: #22b0fc;
+        --accent3: #38c976;
+        --accent5: #7557e6;
+        --hlink: #e25544;
+        --card-bg: #2a2a2d;
+      }
+
+      html {
+        scroll-snap-type: y mandatory;
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Manrope", Arial, sans-serif;
+        background: var(--dk1);
+        color: var(--lt1);
+      }
+
+      .slide {
+        width: 100vw;
+        height: 56.25vw; /* 16:9 */
+        max-height: 100vh;
+        position: relative;
+        padding: 4vw 5vw;
+        scroll-snap-align: start;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .logo {
+        position: absolute;
+        top: 2vw;
+        left: 2.5vw;
+        width: 3.2vw;
+        height: 3.2vw;
+        min-width: 32px;
+        min-height: 32px;
+        background: var(--lt1);
+        border-radius: 18%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 1.4vw;
+        color: var(--dk1);
+      }
+
+      .slide-num {
+        position: absolute;
+        bottom: 1.5vw;
+        right: 2.5vw;
+        font-size: 1vw;
+        color: var(--dk2);
+        font-weight: 600;
+      }
+
+      /* === TITLE SLIDE === */
+      .slide-title {
+        justify-content: flex-end;
+        padding-bottom: 8vw;
+      }
+      .slide-title h1 {
+        font-size: 4.8vw;
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 1vw;
+      }
+      .slide-title p {
+        font-size: 1.8vw;
+        font-weight: 600;
+        color: var(--dk2);
+      }
+
+      /* === AGENDA === */
+      .slide-agenda {
+        padding-top: 6vw;
+      }
+      .slide-agenda h2 {
+        font-size: 2.4vw;
+        font-weight: 700;
+        margin-bottom: 2vw;
+        padding-left: 1vw;
+      }
+      .agenda-items {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8vw;
+        padding-left: 1vw;
+      }
+      .agenda-item {
+        background: #2e2e31;
+        padding: 1vw 2vw;
+        border-radius: 0.4vw;
+        font-size: 1.6vw;
+        font-weight: 600;
+        border-left: 0.3vw solid var(--hlink);
+      }
+
+      /* === SECTION HEADER === */
+      .slide-section {
+        justify-content: center;
+        align-items: center;
+      }
+      .slide-section h2 {
+        font-size: 3.2vw;
+        font-weight: 700;
+        text-align: center;
+      }
+
+      /* === BULLETS === */
+      .slide-bullets {
+        padding-top: 6vw;
+      }
+      .slide-bullets h2 {
+        font-size: 2.4vw;
+        font-weight: 700;
+        margin-bottom: 2vw;
+      }
+      .slide-bullets ul {
+        list-style: none;
+        padding-left: 0;
+      }
+      .slide-bullets ul li {
+        font-size: 1.6vw;
+        font-weight: 600;
+        line-height: 1.6;
+        padding: 0.3vw 0;
+        padding-left: 1.5vw;
+        position: relative;
+      }
+      .slide-bullets ul li::before {
+        content: "-";
+        position: absolute;
+        left: 0;
+        color: var(--hlink);
+        font-weight: 700;
+      }
+      .slide-bullets .quote,
+      .slide-grid-4 .quote {
+        margin-top: 2vw;
+        font-style: italic;
+        color: var(--dk2);
+        font-size: 1.4vw;
+        border-left: 0.3vw solid var(--hlink);
+        padding-left: 1.5vw;
+      }
+      .slide-bullets .subtitle {
+        font-size: 1.3vw;
+        color: var(--dk2);
+        margin-top: 1vw;
+      }
+
+      /* === MEME IMAGE === */
+      .meme-img {
+        max-height: 18vw;
+        border-radius: 0.6vw;
+        margin-top: 1.5vw;
+        object-fit: contain;
+      }
+
+      /* === CODE/ARTIFACT BLOCK === */
+      .artifact {
+        background: #1a1a1d;
+        border: 1px solid #333;
+        border-radius: 0.6vw;
+        padding: 1.5vw 2vw;
+        margin-top: 1.5vw;
+        font-family: "Courier New", monospace;
+        font-size: 1vw;
+        line-height: 1.7;
+        color: #ccc;
+        overflow-y: auto;
+        flex: 1;
+        max-height: 32vw;
+      }
+      .artifact .heading {
+        color: var(--hlink);
+        font-weight: 700;
+      }
+      .artifact .keyword {
+        color: var(--accent2);
+      }
+      .artifact .checked {
+        color: var(--accent3);
+      }
+      .artifact .unchecked {
+        color: var(--dk2);
+      }
+      .artifact .dim {
+        color: #555;
+      }
+
+      /* === SPLIT LAYOUT === */
+      .split {
+        display: flex;
+        gap: 2vw;
+        flex: 1;
+        align-items: flex-start;
+      }
+      .split-content {
+        flex: 1;
+      }
+      .split-visual {
+        flex: 0 0 35%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* === GRID 4 (2x2) === */
+      .slide-grid-4 {
+        padding-top: 6vw;
+      }
+      .slide-grid-4 h2 {
+        font-size: 2.4vw;
+        font-weight: 700;
+        margin-bottom: 2vw;
+      }
+      .grid-4 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5vw;
+        flex: 1;
+      }
+      .grid-4 .card {
+        background: var(--card-bg);
+        border-radius: 0.6vw;
+        padding: 2vw;
+      }
+      .grid-4 .card h3 {
+        font-size: 2vw;
+        font-weight: 700;
+        color: var(--hlink);
+        margin-bottom: 0.8vw;
+      }
+      .grid-4 .card p {
+        font-size: 1.3vw;
+        font-weight: 600;
+        line-height: 1.5;
+        color: var(--lt1);
+      }
+
+      /* === GRID 3 === */
+      .slide-grid-3 {
+        padding-top: 6vw;
+      }
+      .slide-grid-3 h2 {
+        font-size: 2.4vw;
+        font-weight: 700;
+        margin-bottom: 2vw;
+      }
+      .grid-3 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1.5vw;
+        flex: 1;
+      }
+      .grid-3 .card {
+        background: var(--card-bg);
+        border-radius: 0.6vw;
+        padding: 2vw;
+      }
+      .grid-3 .card h3 {
+        font-size: 2vw;
+        font-weight: 700;
+        color: var(--hlink);
+        margin-bottom: 0.8vw;
+      }
+      .grid-3 .card p {
+        font-size: 1.3vw;
+        font-weight: 600;
+        line-height: 1.5;
+      }
+
+      /* === Q&A === */
+      .slide-qa {
+        justify-content: center;
+        align-items: center;
+      }
+      .slide-qa h2 {
+        font-size: 7.2vw;
+        font-weight: 800;
+      }
+
+      /* === WORKFLOW DIAGRAM === */
+      .workflow {
+        display: flex;
+        align-items: center;
+        gap: 0.8vw;
+        margin: 1.5vw 0;
+        flex-wrap: wrap;
+      }
+      .workflow .step {
+        background: var(--card-bg);
+        padding: 0.8vw 1.5vw;
+        border-radius: 0.4vw;
+        font-size: 1.3vw;
+        font-weight: 700;
+      }
+      .workflow .step .label {
+        display: block;
+        font-size: 0.9vw;
+        color: var(--dk2);
+        font-weight: 600;
+      }
+      .workflow .arrow {
+        font-size: 1.5vw;
+        color: var(--hlink);
+      }
+
+      /* code inline */
+      code {
+        background: var(--card-bg);
+        padding: 0.2vw 0.5vw;
+        border-radius: 0.3vw;
+        font-family: "Courier New", monospace;
+        font-size: 0.95em;
+        color: var(--hlink);
+      }
+
+      /* === TABLE === */
+      .nines-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1.5vw;
+        font-size: 1.3vw;
+        font-weight: 600;
+      }
+      .nines-table th {
+        text-align: left;
+        padding: 0.6vw 1.2vw;
+        color: var(--dk2);
+        border-bottom: 0.15vw solid #444;
+        font-size: 1.1vw;
+      }
+      .nines-table td {
+        padding: 0.6vw 1.2vw;
+        border-bottom: 1px solid #333;
+      }
+      .nines-table tr.highlight-row td {
+        color: var(--accent3);
+        font-weight: 700;
+      }
+      .nines-table .dim-row td {
+        color: var(--dk2);
+      }
+
+      /* === PRINT === */
+      @media print {
+        html {
+          scroll-snap-type: none;
+        }
+        .slide {
+          width: 100vw;
+          height: 56.25vw;
+          page-break-after: always;
+          scroll-snap-align: none;
+        }
+        @page {
+          size: landscape;
+          margin: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- SLIDE 1: TITLE -->
+    <section class="slide slide-title">
+      <div class="logo">Ma</div>
+      <h1>Uptime Monitoring</h1>
+      <p>Self-hosted, code-first, cost-effective</p>
+      <span class="slide-num">1</span>
+    </section>
+
+    <!-- SLIDE 2: AGENDA -->
+    <section class="slide slide-agenda">
+      <div class="logo">Ma</div>
+      <h2>Agenda</h2>
+      <div class="agenda-items">
+        <div class="agenda-item">Objective</div>
+        <div class="agenda-item">Monitoring State</div>
+        <div class="agenda-item">Industry Standards</div>
+        <div class="agenda-item">Architecture</div>
+        <div class="agenda-item">Live Demo</div>
+        <div class="agenda-item">Key Takeaways</div>
+      </div>
+      <span class="slide-num">2</span>
+    </section>
+
+    <!-- SLIDE 3: SECTION — Objective -->
+    <section class="slide slide-section">
+      <div class="logo">Ma</div>
+      <h2>Objective</h2>
+      <span class="slide-num">3</span>
+    </section>
+
+    <!-- SLIDE 4: PROBLEM BULLETS + MEME -->
+    <section class="slide slide-bullets">
+      <div class="logo">Ma</div>
+      <div class="split">
+        <div class="split-content">
+          <ul>
+            <li>
+              Higher delivery speed, frequent changes = higher risk of something
+              breaking <strong>unnoticed</strong>
+            </li>
+            <li>
+              Detection time was <strong>random</strong> &mdash; sometimes
+              minutes, sometimes hours
+            </li>
+            <li>
+              Existing monitoring was pricy and didn&rsquo;t cover all pages
+              across all domains
+            </li>
+            <li>
+              Single incident may have a potential loss of
+              <strong>~$5k</strong>; downtime during active marketing campaigns
+              is especially costly &mdash; recovering lost traffic and momentum
+              can be challenging
+            </li>
+            <li>
+              More than <strong>$7k lost</strong> due to outages and downtime
+              across 2025 to date
+            </li>
+          </ul>
+          <div class="quote">
+            &ldquo;54% of significant outages cost over $100,000; 40% of major
+            outages caused by human error&rdquo; &mdash; Uptime Institute, 2025
+          </div>
+        </div>
+        <div class="split-visual">
+          <img
+            class="meme-img"
+            src="this-is-fine.jpg"
+            alt="This is fine meme"
+            style="max-height: 22vw"
+          />
+        </div>
+      </div>
+      <span class="slide-num">4</span>
+    </section>
+
+    <!-- SLIDE 5: SECTION — Monitoring State -->
+    <section class="slide slide-section">
+      <div class="logo">Ma</div>
+      <h2>Monitoring State</h2>
+      <span class="slide-num">5</span>
+    </section>
+
+    <!-- SLIDE 6: CURRENT STATE -->
+    <section class="slide slide-bullets">
+      <div class="logo">Ma</div>
+      <h2>Where We Are Today</h2>
+      <ul>
+        <li>
+          Self-hosted <strong>Uptime Kuma</strong> at
+          <code>status.mate.academy</code>
+        </li>
+        <li>
+          Synthetic checks: <strong>1 min</strong> interval for high-traffic and
+          paid-traffic pages, <strong>5 min</strong> for blog pages
+        </li>
+        <li>Dedicated store for heartbeat history</li>
+        <li>
+          Caught a <strong>memory leak</strong> on frontend landings early
+          &mdash; could have hit us under higher traffic at a worse time
+        </li>
+        <li>
+          Cross-product: <strong>Kodree</strong> already moved their monitoring
+          from Sentry to Uptime Kuma
+        </li>
+      </ul>
+      <span class="slide-num">6</span>
+    </section>
+
+    <!-- SLIDE 7: SECTION — Industry Standards -->
+    <section class="slide slide-section">
+      <div class="logo">Ma</div>
+      <h2>Industry Standards</h2>
+      <span class="slide-num">7</span>
+    </section>
+
+    <!-- SLIDE 8: MONITORING TECHNIQUES -->
+    <section class="slide slide-grid-4">
+      <div class="logo">Ma</div>
+      <h2>Monitoring Techniques</h2>
+      <div class="grid-4">
+        <div class="card" style="border: 0.15vw solid var(--accent3)">
+          <h3 style="color: var(--accent3)">Synthetic Monitoring</h3>
+          <p>
+            Simulated requests at regular intervals from multiple locations.
+            <strong>Proactive</strong> &mdash; catches outages before users
+            report them.
+          </p>
+        </div>
+        <div class="card" style="border: 0.15vw solid var(--accent3)">
+          <h3 style="color: var(--accent3)">Real User Monitoring</h3>
+          <p>
+            JavaScript on pages measures actual user experience (load time,
+            errors, Core Web Vitals). <strong>Reactive</strong> &mdash; shows
+            real-world impact.
+          </p>
+        </div>
+        <div class="card">
+          <h3>Error Budget / SLO</h3>
+          <p>
+            Google SRE approach: define an SLO (e.g. 99.9%), track allowed
+            downtime per quarter, alert when burn rate is too high.
+          </p>
+        </div>
+        <div class="card">
+          <h3>Chaos Engineering</h3>
+          <p>
+            Netflix approach: deliberately inject failures (Chaos Monkey) to
+            verify resilience before real incidents happen.
+          </p>
+        </div>
+      </div>
+      <div class="quote">
+        We use: <strong>Uptime Kuma</strong> for synthetic monitoring,
+        <strong>Sentry</strong> for real user monitoring
+      </div>
+      <span class="slide-num">8</span>
+    </section>
+
+    <!-- SLIDE 9: NINES TABLE -->
+    <section class="slide slide-bullets">
+      <div class="logo">Ma</div>
+      <h2>The &ldquo;Nines&rdquo; of Availability</h2>
+      <table class="nines-table">
+        <thead>
+          <tr>
+            <th>Availability</th>
+            <th>Downtime / year</th>
+            <th>Downtime / month</th>
+            <th>Typical use case</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="dim-row">
+            <td>99%</td>
+            <td>3.65 days</td>
+            <td>7.31 hours</td>
+            <td>Internal tools</td>
+          </tr>
+          <tr class="highlight-row">
+            <td>99.9%</td>
+            <td>8.77 hours</td>
+            <td>43.8 min</td>
+            <td>Most SaaS / web apps</td>
+          </tr>
+          <tr class="highlight-row">
+            <td>99.95%</td>
+            <td>4.38 hours</td>
+            <td>21.9 min</td>
+            <td>Cloud providers (AWS EC2 SLA)</td>
+          </tr>
+          <tr class="dim-row">
+            <td>99.99%</td>
+            <td>52.6 min</td>
+            <td>4.38 min</td>
+            <td>Payment systems, e-commerce</td>
+          </tr>
+          <tr class="dim-row">
+            <td>99.999%</td>
+            <td>5.26 min</td>
+            <td>25.9 sec</td>
+            <td>Telecom, healthcare, finance</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="quote">
+        <strong>SLA</strong> (Service Level Agreement) &mdash; a contract
+        promising a certain uptime. <strong>SLO</strong> (Service Level
+        Objective) &mdash; an internal target, usually stricter than the SLA.
+      </div>
+      <div class="quote">
+        Mate academy frontend landings uptime: <strong>99.65%</strong> (~1.28
+        days downtime/year, ~2.56 hours/month)
+      </div>
+      <span class="slide-num">9</span>
+    </section>
+
+    <!-- SLIDE 10: SECTION — Architecture -->
+    <section class="slide slide-section">
+      <div class="logo">Ma</div>
+      <h2>Architecture</h2>
+      <span class="slide-num">10</span>
+    </section>
+
+    <!-- SLIDE 11: UPTIME KUMA CORE -->
+    <section class="slide slide-bullets">
+      <div class="logo">Ma</div>
+      <h2>Uptime Kuma Under the Hood</h2>
+      <p
+        style="
+          font-size: 1.5vw;
+          font-weight: 600;
+          color: var(--lt1);
+          margin-bottom: 2vw;
+        "
+      >
+        A self-hosted, open-source monitoring tool. An alternative to Pingdom or
+        UptimeRobot &mdash; free, fully under our control, and extensible.
+      </p>
+      <ul>
+        <li>
+          <strong>Node.js</strong> &mdash; naturally effective for I/O-bound
+          tasks like HTTP health checks. Handles hundreds of monitors
+          concurrently on a single process.
+        </li>
+        <li>
+          <strong>90+ Notifications</strong> &mdash; PagerDuty, Slack, Telegram,
+          email, webhooks &mdash; built-in integrations for alerting on status
+          changes.
+        </li>
+        <li>
+          <strong>MariaDB on RDS</strong> &mdash; two storage options: SQLite
+          (default, single-file) or MariaDB. We chose MariaDB for reliability
+          and long-term heartbeat history storage.
+        </li>
+      </ul>
+      <span class="slide-num">11</span>
+    </section>
+
+    <!-- SLIDE 12: OUR STACK -->
+    <section class="slide slide-bullets">
+      <div class="logo">Ma</div>
+      <h2>Our Infrastructure</h2>
+      <img
+        src="uptime_monitoring_new_page_flow.png"
+        alt="Flow of adding a new page to monitoring"
+        style="
+          width: 100%;
+          max-height: 28vw;
+          object-fit: contain;
+          margin-bottom: 1.5vw;
+        "
+      />
+      <ul>
+        <li>
+          <strong>Code-first approach</strong>: Knex seeders as migrations, no
+          manual UI config
+        </li>
+        <li>
+          <strong>Kubernetes</strong> (ArgoCD), Helm chart, SealedSecrets for
+          credentials
+        </li>
+        <li>
+          <strong>Reproducible</strong>: version-controlled, reviewable,
+          rollbackable
+        </li>
+      </ul>
+      <span class="slide-num">12</span>
+    </section>
+
+    <!-- SLIDE 13: WHY CODE-FIRST -->
+    <section class="slide slide-grid-4">
+      <div class="logo">Ma</div>
+      <h2>Why Code-First Matters</h2>
+      <div class="grid-4">
+        <div class="card">
+          <h3>ClickOps doesn&rsquo;t scale</h3>
+          <p>
+            Adding 157 monitors by clicking through UI forms? No review, no
+            history, no rollback.
+          </p>
+        </div>
+        <div class="card">
+          <h3>Audit Trail</h3>
+          <p>
+            Git blame shows who added each monitor, when, and why. PR
+            description has the full context.
+          </p>
+        </div>
+        <div class="card">
+          <h3>Consistency</h3>
+          <p>
+            Templates enforce defaults (retry interval, notification type, tags)
+            &mdash; no monitor is misconfigured.
+          </p>
+        </div>
+        <div class="card">
+          <h3>Disaster Recovery</h3>
+          <p>
+            Uptime Kuma dies? Re-run all seeders on a fresh instance &mdash;
+            back to full coverage.
+          </p>
+        </div>
+      </div>
+      <span class="slide-num">13</span>
+    </section>
+
+    <!-- SLIDE 14: SEEDER EXAMPLE -->
+    <section class="slide slide-bullets">
+      <div class="logo">Ma</div>
+      <h2>What a Seeder Looks Like</h2>
+      <div class="artifact">
+        <span class="keyword">import</span> type { Knex }
+        <span class="keyword">from</span>
+        <span class="checked">'knex'</span>;<br />
+        <span class="keyword">import</span> { createMonitor }
+        <span class="keyword">from</span>
+        <span class="checked"
+          >'../src/modules/monitors/templates/createMonitor'</span
+        >;<br />
+        <span class="keyword">import</span> { deleteMonitor }
+        <span class="keyword">from</span>
+        <span class="checked"
+          >'../src/modules/monitors/templates/deleteMonitor'</span
+        >;<br />
+        <span class="keyword">import</span> { NOTIFICATION_TYPE }
+        <span class="keyword">from</span>
+        <span class="checked"
+          >'../src/modules/notifications/notifications.constants'</span
+        >;<br />
+        <span class="keyword">import</span> { TAG_NAME }
+        <span class="keyword">from</span>
+        <span class="checked">'../src/modules/tags/tags.constants'</span>;<br />
+        <span class="keyword">import</span> { deriveMonitorName }
+        <span class="keyword">from</span>
+        <span class="checked">'../src/modules/monitors/monitors.utils'</span
+        >;<br />
+        <br />
+        <span class="keyword">const</span> MONITOR_URL =
+        <span class="checked"
+          >'https://mate.academy/lpa/marathon/ui-ux-design'</span
+        >;<br />
+        <br />
+        <span class="keyword">export async function</span> up(knex: Knex):
+        Promise&lt;void&gt; {<br />
+        &nbsp;&nbsp;<span class="keyword">await</span> createMonitor({<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;knex,<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;url: MONITOR_URL,<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;name: deriveMonitorName(MONITOR_URL),<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;notificationType: NOTIFICATION_TYPE.<span
+          class="keyword"
+          >PagerDuty</span
+        >,<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;tag: TAG_NAME.<span class="keyword"
+          >MateAcademy</span
+        >,<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;active: <span class="keyword">true</span>,<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;interval:
+        <span class="keyword">300</span
+        >,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+          class="dim"
+          >// 5 minutes</span
+        ><br />
+        &nbsp;&nbsp;&nbsp;&nbsp;retryInterval:
+        <span class="keyword">20</span>,<br />
+        &nbsp;&nbsp;});<br />
+        }<br />
+        <br />
+        <span class="keyword">export async function</span> down(knex: Knex):
+        Promise&lt;void&gt; {<br />
+        &nbsp;&nbsp;<span class="keyword">await</span> deleteMonitor({ knex,
+        url: MONITOR_URL });<br />
+        }
+      </div>
+      <p class="subtitle">
+        Real seeder from production. One file. Reviewable. Rollbackable.
+      </p>
+      <span class="slide-num">14</span>
+    </section>
+
+    <!-- SLIDE 15: SECTION — Live Demo -->
+    <section class="slide slide-section">
+      <div class="logo">Ma</div>
+      <h2>Live Demo</h2>
+      <span class="slide-num">15</span>
+    </section>
+
+    <!-- SLIDE 16: LIVE DEMO -->
+    <section class="slide slide-bullets">
+      <div class="logo">Ma</div>
+      <h2>Adding a New Page to Monitoring</h2>
+      <div class="artifact" style="font-size: 1.2vw; line-height: 2">
+        <span class="dim"># Request via Slack:</span><br />
+        <br />
+        <span class="keyword">@Claude</span>, please create a PR with a seeder
+        in<br />
+        uptime-monitoring to add<br />
+        <span class="checked"
+          >https://mate.academy/lpa/marathon/data-analyst-marathon</span
+        ><br />
+        with a <span class="keyword">5-minute</span> interval<br />
+        <br />
+        <span class="dim"># What happens:</span><br />
+        <span class="checked">[x]</span> Claude creates the seeder file<br />
+        <span class="checked">[x]</span> Opens a PR for review<br />
+        <span class="checked">[x]</span> After merge: npm run seed applies it<br />
+        <span class="checked">[x]</span> Monitor appears in Uptime Kuma UI
+      </div>
+      <span class="slide-num">16</span>
+    </section>
+
+    <!-- SLIDE 17: SECTION — Key Takeaways -->
+    <section class="slide slide-section">
+      <div class="logo">Ma</div>
+      <h2>Key Takeaways</h2>
+      <span class="slide-num">17</span>
+    </section>
+
+    <!-- SLIDE 18: LESSONS LEARNED + MEME -->
+    <section class="slide slide-bullets">
+      <div class="logo">Ma</div>
+      <h2>Lessons Learned</h2>
+      <div class="split">
+        <div class="split-content">
+          <ul>
+            <li>
+              <strong style="color: var(--accent3)"
+                >Start with synthetic</strong
+              >
+              &mdash; covers the most ground with least effort
+            </li>
+            <li>
+              <strong style="color: var(--accent3)"
+                >Code-first pays off quickly</strong
+              >
+              &mdash; no config drift, easy onboarding, reviewable changes
+            </li>
+            <li>
+              <strong style="color: var(--hlink)"
+                >Monitoring finds surprises</strong
+              >
+              &mdash; exposed a memory leak we didn&rsquo;t know about
+            </li>
+            <li>
+              <strong style="color: var(--accent3)"
+                >Self-hosted = cost-effective</strong
+              >
+              &mdash; replaces pricy external tools with full control
+            </li>
+          </ul>
+          <div class="quote">
+            What&rsquo;s next: monitor to detect unmonitored pages, notification
+            grouping, dashboards for viewing monitoring over specific periods
+          </div>
+        </div>
+        <div class="split-visual">
+          <img
+            class="meme-img"
+            src="monkey-puppet.jpg"
+            alt="Monkey puppet side-eye meme"
+            style="max-height: 22vw"
+          />
+        </div>
+      </div>
+      <span class="slide-num">18</span>
+    </section>
+
+    <!-- SLIDE 19: Q&A -->
+    <section class="slide slide-qa">
+      <div class="logo">Ma</div>
+      <h2>Q&A</h2>
+      <span class="slide-num">19</span>
+    </section>
+  </body>
+</html>
